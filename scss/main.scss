@@ -1,27 +1,63 @@
 @import 'reset';
 @import 'variables';
 
+@function weight($weight-name) {
+    @return map-get($font-weights, $weight-name);
+}
+
+@mixin flexCenter($direction) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: $direction;
+}
+
+@mixin theme($light-theme) {
+    @if $light-theme {
+        // this opposite of main theme [black bg and white font]
+        //we are inverting the colors respectively
+        background: lighten($primary-color, 100%); //lighten is inbuild
+        color: darken($text-color, 100%);
+    }
+}
+
+@mixin mobile {
+    @media (max-width: $mobile) {
+        @content; //the content that we will call within the mobile mixin where we call it
+    }
+}
+
 body {
     background: $primary-color;
     color: $text-color;
     font-weight: map-get($font-weights, bold);
 }
 
+
 .main {
+    @include flexCenter(row);
     width: 80%;
     margin: 0 auto;
-}
-
-
-.main {
+    border: 1px solid #666;
     #{&}__child { //#{&} appends the parents name ;)
         color: #ff652f;
     }
     p {
-        font-weight: map-get($font-weights, regular);
+        // font-weight: map-get($font-weights, regular);
+        font-weight: weight(regular);
+        border: 1px solid #eedddd;
+        text-align: center;
         cursor: pointer;
         &:hover {
             color: pink;
         }
     }
+    @include mobile {
+        //this is like media query
+        flex-direction: column;
+    }
+}
+
+.light {
+    @include theme($light-theme: true);
 }
